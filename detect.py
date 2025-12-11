@@ -26,7 +26,7 @@ Files required:
 """
 
 __author__ = "Jessie-Networks"
-__copyright__ = "Jessie-Networks"
+__copyright__ = "Jessie-Networks" #Placeholder, I am not claiming ownership of this code, only my changes.
 __credits__ = ["David W Plummer, Dave's Garage, Github: davepl"]
 __license__ = "MIT"
 __version__ = "0.0.1"
