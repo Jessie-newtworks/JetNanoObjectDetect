@@ -11,7 +11,8 @@ This project uses a **Jetson Orin Nano** development board running a local Ultra
 - Jetson Orin Nano development board  
 - Suitable RTSP-capable IP cameras  
 - Python 3.x  
-- Required Python packages (see `requirements.txt`)  
+- Required Python packages (see `requirements.txt`)
+- Home Assistant server setup to accept webhook commands  
 
 ## Configuration
 ```bash
