@@ -1,0 +1,4 @@
+{
+  "driveway" : "rtsp://<ip>:<port>/<stream-id>",
+  "garage" : "rtsp://<ip>:<port>/<stream-id>"
+}
