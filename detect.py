@@ -1,3 +1,40 @@
+"""
+detect.py
+
+Monitors two RTSP camera streams and provides detection output to a
+Home Assistant server for action or notification.
+
+This module uses YOLOv8 for object detection on a Jetson Orin Nano and
+loads RTSP camera configuration from config/config.json.
+
+Functions:
+- main(): Main loop of the module.
+- load_config(): Loads configuration values from JSON.
+
+Classes:
+- Notifier: Handles webhook notifications to Home Assistant. (TODO)
+- VehicleTracker: Tracks detected vehicles across frames. (TODO)
+
+Dependencies:
+- ultralytics (YOLOv8)
+- opencv-python (cv2)
+- numpy
+- torch (Jetson-distributed version, not PyPI)
+
+Files required:
+- config/config.json
+"""
+
+__author__ = "Jessie-Networks"
+__copyright__ = "Jessie-Networks"
+__credits__ = ["David W Plummer, Dave's Garage, Github: davepl"]
+__license__ = "MIT"
+__version__ = "0.0.1"
+__maintainer__ = "Jessie-Newtwork"
+__email__ = "via github"
+__status__ = "Alpha"
+
+
 import torch
 from ultralytics import YOLO
 import cv2
@@ -107,7 +144,6 @@ class VehicleTracker:
                 del self.vehicles[vehicle_id]
     
     # Calculate IoU between two boxes (Intersection over Union)
-
     def calculate_overlap(self, box1, box2):
         x1, y1, w1, h1 = box1
         x2, y2, w2, h2 = box2
@@ -131,7 +167,6 @@ class VehicleTracker:
         return intersection / union if union > 0 else 0
     
     # Get vehicle status based on time present
-    
     def get_vehicle_status(self, vehicle_id):
         if vehicle_id not in self.vehicle_history:
             return "Unknown"
