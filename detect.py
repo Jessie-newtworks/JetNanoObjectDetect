@@ -25,6 +25,8 @@ Files required:
 - config/config.json
 """
 
+# pylint: disable=no-member
+
 __author__ = "Jessie-Networks"
 # Copyright Placeholder, I am not claiming ownership of this code, only my changes.
 __copyright__ = "Jessie-Networks"
@@ -42,17 +44,25 @@ import json
 import torch
 from ultralytics import YOLO
 import cv2
-import numpy as np
+#import numpy as np
 
-
+# pylint: disable=too-few-public-methods
 class Notifier:
+    """
+    This class is used as a placeholder for future notifications.
+    This docstring will be updated later.
+    """
     def __init__(self):
         pass
 
     def speak(self, text):
+        """placeholder"""
         subprocess.run(['say', text])
 
 class VehicleTracker:
+    """
+    This class is used for vehicle tracking, this docstring will be updated later.
+    """
     def __init__(self, confidence_threshold=0.4, max_disappeared=30*10):
         # Initialize YOLO model with GPU support
         self.notifier = Notifier()
@@ -74,6 +84,7 @@ class VehicleTracker:
         self.vehicle_classes = [2, 5, 7]  # car, bus, truck in YOLOv8
 
     def process_frame(self, frame, target_fps=10):
+        """Method to process frames read by the model."""
         # Convert frame to RGB for YOLO
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -113,6 +124,7 @@ class VehicleTracker:
 
         return frame
     def update_tracking(self, current_vehicles):
+        """Placeholder"""
         # Mark all existing vehicles as disappeared initially
         for vehicle_id in self.vehicles:
             self.vehicles[vehicle_id]["disappeared"] += 1
@@ -145,6 +157,7 @@ class VehicleTracker:
 
     # Calculate IoU between two boxes (Intersection over Union)
     def calculate_overlap(self, box1, box2):
+        """Placeholder"""
         x1, y1, w1, h1 = box1
         x2, y2, w2, h2 = box2
 
@@ -168,6 +181,7 @@ class VehicleTracker:
 
     # Get vehicle status based on time present
     def get_vehicle_status(self, vehicle_id):
+        """Placeholder"""
         if vehicle_id not in self.vehicle_history:
             return "Unknown"
 
@@ -183,11 +197,13 @@ class VehicleTracker:
 
 # Load the config JSON file that contains camera RTSP addresses
 def load_config():
-    with open("./config.json", 'r') as file:
+    """Helper function to load the JSON file for use in main."""
+    with open("./config.json", 'r', encoding="utf-8") as file:
         config = json.load(file)
         return config
 
 def main():
+    """Placeholder"""
     # Load the config file
     config = load_config()
 
