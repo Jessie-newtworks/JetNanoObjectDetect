@@ -5,6 +5,7 @@ import numpy as np
 from collections import defaultdict
 import time
 import subprocess
+import json
 
 class Notifier:
     def __init__(self):
@@ -145,12 +146,22 @@ class VehicleTracker:
         else:
             return "Present"
 
+# Load the config json file that contains camera RTSP addresses
+def load_config():
+    with open("config.json") as file:
+        config = json.load(file)
+
 def main():
+    # Load the config file
+    load_config()
+    
     # Initialize tracker
     tracker = VehicleTracker()
-    
+
+    # Saved removed code for referece, remove later ***
+    #cap = cv2.VideoCapture('rtsp://192.168.1.1:7447/5EPTINH0aTXqTqC3')
     # Access RTSP stream
-    cap = cv2.VideoCapture('rtsp://192.168.1.1:7447/5EPTINH0aTXqTqC3')
+    cap = cv2.VideoCapture(config["driveway"])
     
     # Set buffer size
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
