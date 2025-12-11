@@ -46,6 +46,7 @@ from ultralytics import YOLO
 import cv2
 #import numpy as np
 
+# pylint: disable=too-few-public-methods
 class Notifier:
     """
     This class is used as a placeholder for future notifications.
