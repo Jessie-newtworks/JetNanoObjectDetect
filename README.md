@@ -15,14 +15,16 @@ This project uses a **Jetson Orin Nano** development board running a local Ultra
 
 ## Configuration
 ```bash
-cp `config.example.json` `config.json`  
-```  
-Edit 'config.json' and replace the placeholder values for the driveway and garage cameras.  
+cp config.example.json config.json
+```
+Edit `config.json` and replace the placeholder values for the driveway and garage cameras.  
 
 ## Usage
-python detect.py  
+```bash
+python detect.py
+```
 
 # TODO:  
 - Add startup script
 - Add systemd service or cron job for automatic startup  
-- Add installation instructions and dependency setup
+- Add installation instructions and dependency setup  
