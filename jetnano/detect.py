@@ -44,6 +44,7 @@ import json
 import torch
 from ultralytics import YOLO
 import cv2
+from importlib import resources
 #import numpy as np
 
 # pylint: disable=too-few-public-methods
@@ -70,7 +71,7 @@ class VehicleTracker:
         print(f"Using device: {self.device}")
         self.notifier.speak("Detection Initiated")
         # Load YOLO model
-        self.model = YOLO('yolov8s.pt')  # or 'yolov8n.pt' for less accuracy but faster inference
+        self.model = YOLO('../yolov8s.pt')  # or 'yolov8n.pt' for less accuracy but faster inference
         self.model.to(self.device)
 
         # Tracking parameters
@@ -198,9 +199,8 @@ class VehicleTracker:
 # Load the config JSON file that contains camera RTSP addresses
 def load_config():
     """Helper function to load the JSON file for use in main."""
-    with open("./config.json", 'r', encoding="utf-8") as file:
-        config = json.load(file)
-        return config
+    with resources.open_text("jetnano.config", "config.json") as file:
+        return json.load(file)
 
 def main():
     """Placeholder"""
