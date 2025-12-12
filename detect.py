@@ -210,10 +210,10 @@ def main():
     # Initialize tracker
     tracker = VehicleTracker()
 
-    # Saved removed code for referece, remove later ***
+    # Saved removed code for reference, remove later ***
     #cap = cv2.VideoCapture('rtsp://192.168.1.1:7447/5EPTINH0aTXqTqC3')
     # Access RTSP stream
-    cap = cv2.VideoCapture(config["driveway"])
+    cap = cv2.VideoCapture(config["garage"])
 
     # Set buffer size
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
