@@ -29,7 +29,7 @@ python detect.py
 - Add startup script
 - Add systemd service or cron job for automatic startup  
 - Add installation instructions and dependency setup
-- Update foldoer structure
+- Update foldor structure
 
 # TODO for detect.py:  
 - TODO  
