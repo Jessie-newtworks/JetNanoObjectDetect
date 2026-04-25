@@ -22,7 +22,7 @@ Edit `config.json` and replace the placeholder values for the driveway and garag
 
 ## Usage
 ```bash
-python detect.py
+python -m jetnano.detect.py
 ```
 
 # TODO for Readme and Repo:  

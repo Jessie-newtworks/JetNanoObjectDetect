@@ -41,10 +41,15 @@ from collections import defaultdict
 import time
 import subprocess
 import json
+
+import numpy as np
 import torch
 from ultralytics import YOLO
 import cv2
-#import numpy as np
+from importlib import resources
+
+
+# import numpy as np
 
 # pylint: disable=too-few-public-methods
 class Notifier:
@@ -52,6 +57,7 @@ class Notifier:
     This class is used as a placeholder for future notifications.
     This docstring will be updated later.
     """
+
     def __init__(self):
         pass
 
@@ -59,18 +65,20 @@ class Notifier:
         """placeholder"""
         subprocess.run(['say', text])
 
+
 class VehicleTracker:
     """
     This class is used for vehicle tracking, this docstring will be updated later.
     """
-    def __init__(self, confidence_threshold=0.4, max_disappeared=30*10):
+
+    def __init__(self, confidence_threshold=0.4, max_disappeared=30 * 10):
         # Initialize YOLO model with GPU support
         self.notifier = Notifier()
         self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
         print(f"Using device: {self.device}")
         self.notifier.speak("Detection Initiated")
         # Load YOLO model
-        self.model = YOLO('yolov8s.pt')  # or 'yolov8n.pt' for less accuracy but faster inference
+        self.model = YOLO('../yolov8s.pt')  # or 'yolov8n.pt' for less accuracy but faster inference
         self.model.to(self.device)
 
         # Tracking parameters
@@ -81,7 +89,7 @@ class VehicleTracker:
         self.vehicle_history = defaultdict(list)
 
         # Valid vehicle classes in YOLO v8
-        self.vehicle_classes = [2, 5, 7]  # car, bus, truck in YOLOv8
+        self.vehicle_classes = [2]  # car in YOLOv8, removed truck and bus for this application
 
     def process_frame(self, frame, target_fps=10):
         """Method to process frames read by the model."""
@@ -103,9 +111,15 @@ class VehicleTracker:
                 if conf > self.confidence_threshold and cls in self.vehicle_classes:
                     # Get coordinates
                     x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
-                    w = x2 - x1
-                    h = y2 - y1
-                    current_vehicles.append((int(x1), int(y1), int(w), int(h)))
+                    vehicle_box = frame[y1:y2, x1:x2]
+
+                    if vehicle_box == 0:
+                        continue
+
+                    if is_yellow(vehicle_box):
+                        w = x2 - x1
+                        h = y2 - y1
+                        current_vehicles.append((int(x1), int(y1), int(w), int(h)))
 
         # Update tracking
         self.update_tracking(current_vehicles)
@@ -123,6 +137,7 @@ class VehicleTracker:
                             0.5, (0, 255, 0), 2)
 
         return frame
+
     def update_tracking(self, current_vehicles):
         """Placeholder"""
         # Mark all existing vehicles as disappeared initially
@@ -195,12 +210,27 @@ class VehicleTracker:
         else:
             return "Present"
 
+
 # Load the config JSON file that contains camera RTSP addresses
 def load_config():
     """Helper function to load the JSON file for use in main."""
-    with open("./config.json", 'r', encoding="utf-8") as file:
-        config = json.load(file)
-        return config
+    with resources.open_text("jetnano.config", "config.json") as file:
+        return json.load(file)
+
+
+def is_yellow(self, vehicle_box):
+    """Function to determine if the car is yellow, needed for Newtworks use case"""
+    hsv = cv2.cvtColor(vehicle_box, cv2.COLOR_BGR2HSV)
+
+    lower_yellow = np.array([20, 100, 100])
+    upper_yellow = np.array([35, 225, 225])
+
+    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+
+    yellow = np.sum(mask > 0) / mask.size
+
+    return yellow > 0.2
+
 
 def main():
     """Placeholder"""
@@ -210,17 +240,17 @@ def main():
     # Initialize tracker
     tracker = VehicleTracker()
 
-    # Saved removed code for referece, remove later ***
-    #cap = cv2.VideoCapture('rtsp://192.168.1.1:7447/5EPTINH0aTXqTqC3')
+    # Saved removed code for reference, remove later ***
+    # cap = cv2.VideoCapture('rtsp://192.168.1.1:7447/5EPTINH0aTXqTqC3')
     # Access RTSP stream
-    cap = cv2.VideoCapture(config["driveway"])
+    cap = cv2.VideoCapture(config["garage"])
 
     # Set buffer size
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
     # Target FPS and frame timing
     target_fps = 30  # Increased since we're using GPU
-    frame_time = 1/target_fps
+    frame_time = 1 / target_fps
 
     # Performance monitoring
     frame_count = 0
